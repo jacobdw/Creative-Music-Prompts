@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Creative Music Prompts</title>
+
+<meta name="theme-color" content="#000000" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+<style>
+  :root { --bg:#000; --panel:#111; --panel2:#0b0b0b; --text:#fff; --muted:#bdbdbd; --line:#222; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 16px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.35rem;
+    margin: 8px 0 14px;
+    letter-spacing: 0.2px;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  button {
+    width: 100%;
+    padding: 14px 12px;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #141414;
+    color: var(--text);
+  }
+  button:active { background: #222; }
+  .panel {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    padding: 14px;
+  }
+  .titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .tag {
+    font-size: 0.8rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    background: var(--panel2);
+    padding: 6px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  #card {
+    white-space: pre-wrap;
+    line-height: 1.45;
+    font-size: 1rem;
+  }
+  .small {
+    opacity: 0.75;
+    font-size: 0.85rem;
+  }
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .actions button {
+    padding: 12px;
+    font-size: 0.95rem;
+    background: #101010;
+  }
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 12px 0;
+  }
+  .note {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Creative Music Prompts</h1>
+
+    <div class="row">
+      <button onclick="draw('start')">Ways to Start</button>
+      <button onclick="draw('develop')">Ways to Develop (stackable)</button>
+      <button onclick="draw('layers')">Sound / Layer Suggestion</button>
+      <button onclick="draw('unstuck')">Ways to Get Unstuck</button>
+      <button onclick="draw('games')">Collaborative Game (Sam)</button>
+    </div>
+
+    <div class="panel">
+      <div class="titlebar">
+        <div id="categoryLabel" class="tag">Tap a category</div>
+        <div id="modeLabel" class="tag">Mode: Normal</div>
+      </div>
+
+      <div id="card" class="small">Tap a category button above to draw a prompt.</div>
+
+      <div id="secondaryWrap" style="display:none;">
+        <div class="divider"></div>
+        <div class="tag" style="display:inline-block;margin-bottom:8px;">Secondary (stack)</div>
+        <div id="secondaryCard" style="white-space:pre-wrap;line-height:1.45;"></div>
+      </div>
+
+      <div class="actions">
+        <button onclick="reroll()">Re-roll</button>
+        <button onclick="copyCard()">Copy</button>
+        <button onclick="toggleSamMode()">Sam Mode</button>
+        <button onclick="stackSecondary()">Stack (Develop only)</button>
+      </div>
+
+      <div class="divider"></div>
+      <div class="note">
+        • Sam Mode hides solo-focused choices (keeps Develop / Layers / Games).<br/>
+        • “Stack” only works for Develop: it draws a second develop card to combine.
+      </div>
+    </div>
+  </div>
+
+<script>
+/**
+ * FULL PROMPT PACK — from your inputs
+ * Everything is stored as plain strings for maximum simplicity.
+ */
+
+const prompts = {
+  start: [
+    "Start with a pad or drone — find a texture that evokes a mood, then build rhythm or melody around it.",
+    "Play random chords until one sticks — quantize, loop, and tweak voicings or inversions.",
+    "Use an unusual chord progression generator or MIDI pack to spark ideas.",
+    "Transpose a familiar progression into an unexpected mode (e.g., Dorian or Lydian).",
+    "Resample old piano or guitar recordings and stretch them into a new harmonic bed.",
+    "Program a simple 2-bar drum loop — add small syncopations or ghost notes until it feels alive.",
+    "Drag a breakbeat into your sampler and slice it up to make it your own.",
+    "Tap a rhythm on your desk and record it as a groove template.",
+    "Use random MIDI velocity or timing variations for a humanized feel.",
+    "Mute the kick — write with hats and percussion first, then reintroduce the low end later.",
+    "Use a MIDI generator to generate a rhythm.",
+    "Design one synth sound from scratch and let it inspire a motif.",
+    "Use generative tools (like random patch generators or modular sequences).",
+    "Record or import ambient field sounds — build tempo and harmony to fit the soundscape.",
+    "Layer two contrasting timbres (e.g., metallic and warm, digital and organic).",
+    "Create a “character” sound (like a talking bass or evolving pad) that becomes the track’s centerpiece.",
+    "Improvise a short melodic loop using one synth patch — commit to the first take.",
+    "Whistle, hum, or sing an idea into your phone, then translate it to MIDI.",
+    "Sample your own voice and process it into an instrument.",
+    "Use scale constraints (e.g., only white keys or only pentatonic).",
+    "Generate random MIDI notes and trim down what sounds good.",
+    "Pick an emotional keyword or concept (“weightless,” “mechanical,” “melancholy”) and build sonically around it.",
+    "Start from the middle — make a strong 8-bar drop or climax first, then build intro and outro.",
+    "Remix yourself — open an old project and transform one element into a new piece.",
+    "Use film dialogue or poetry samples as the emotional seed.",
+    "Recreate the vibe of a track you love — not the notes, just the atmosphere.",
+    "Use a randomizer rule: e.g., “every sound must be reversed” or “no EQ until the end.”",
+    "Limit yourself to one synth and one drum machine.",
+    "Record a live jam with your controller or synths, then chop out the best 20 seconds to expand.",
+    "Work in Arrangement view early — move away from loop jail fast.",
+    "Resample everything — bounce down MIDI to audio and manipulate it",
+    "Set up a reverb-heavy, low-pass filtered sound and just play slowly to set the tone.",
+    "Pick a tempo and key based on a reference track and build your own version.",
+    "Imagine a scene or place (ocean, city at night, forest dawn) and design sounds that live there.",
+    "Start from silence — build up only what feels essential.",
+    "Jam with visuals (like a short film loop or generative video) to sync emotion and rhythm."
+  ],
+
+  develop: [
+    "Copy your loop across 3–4 minutes and start muting/deleting sections to sketch an arrangement.",
+    "Introduce a new element every 8 bars (even subtle: automation, extra percussion, reverb send).",
+    "Build contrast — make one section dry and intimate, the next wide and lush.",
+    "Create an A/B structure: duplicate your loop, reharmonize or change rhythm in B.",
+    "Use energy waves — build, release, rebuild; structure intensity like breathing.",
+    "Automate filter cutoff, resonance, or LFO depth to evolve timbres over time.",
+    "Double your main sound with subtle variations — octave, stereo width, modulation.",
+    "Switch up drum fills or use probability to trigger rare hits.",
+    "Alternate between “full” and “bare” moments — silence is contrast.",
+    "Transpose motifs up or down 3–5 semitones for development.",
+    "Layer textures that come in and out like waves: pads, field recordings, shimmer verbs.",
+    "Gradually modulate reverb or delay sends to create a sense of movement.",
+    "Resample a synth line, reverse it, or stretch it for texture transitions.",
+    "Use macro controls (in Ableton or similar) to tie multiple parameters to one expressive knob.",
+    "Morph sounds using spectral processing, vocoding, or granular effects.",
+    "Change swing or shuffle in different sections.",
+    "Introduce rhythmic counterpoint (syncopated synth vs. straight drums).",
+    "Use rhythmic gating, tremolo, or sidechain compression to animate static elements.",
+    "Mute the kick temporarily to create dynamic contrast.",
+    "Drop out all rhythm mid-section for an ambient bridge.",
+    "Reharmonize the same melody with new chords or a pedal tone.",
+    "Use risers, downlifters, sweeps, and noise bursts for section changes.",
+    "Automate low-pass or high-pass filters across transitions.",
+    "Introduce silence or a breakbeat moment right before a drop or chorus.",
+    "Reverse key sounds or tails to lead into new sections.",
+    "Time-stretch a snippet of the upcoming section as a teaser.",
+    "Invert chord voicings or change extensions (maj7 → 9 → sus2).",
+    "Add a countermelody that complements or responds to the main line.",
+    "Improvise a melodic variation over the same progression, then tighten timing.",
+    "Use call-and-response phrasing between instruments or textures.",
+    "Shift the emotional tone — same elements, different context (major ↔ minor, dark ↔ bright).",
+    "Introduce a motif from a different world (e.g., organic sample in electronic mix).",
+    "Tell a “story” through texture — evolving from static to chaotic or cold to warm.",
+    "Let a single sound “transform” over the track’s arc, like a protagonist’s journey.",
+    "Base development on a metaphor (e.g., “waves”, “awakening”, “machine learning to dream”).",
+    "Print everything to audio and rearrange freely like collage.",
+    "Apply random modulation to several parameters, then capture what works.",
+    "Use extreme time-stretch or pitch-shifting for ghost versions of your parts.",
+    "Freeze a moment of sound (with granular tools) and sculpt from it.",
+    "Glitch or stutter slices to create new rhythmic hooks.",
+    "Push one sound forward, pull another back — balance creates movement.",
+    "Take one sound and rebuild a whole new track around it.",
+    "Change tempo or meter — 4/4 to 6/8 or half-time/double-time.",
+    "Flip genres: turn ambient pad loops into techno or downtempo.",
+    "Collaborate with a friend — their interpretation can push it somewhere unexpected.",
+    "Mute your favorite element — what happens when it’s gone?",
+    "Automate volume swells and panning for living mixes.",
+    "EQ sweep transitions — pull low end out of a section then drop it back.",
+    "Play with stereo space — mono breakdowns vs. wide chorus.",
+    "Use saturation or tape effects to “age” sections differently."
+  ],
+
+  games: [
+    "No Talking While Playing\n\nCommunicate only through sound.\n(No verbal cues once the music starts.)",
+    "Forbidden Tool\n\nAgree on one instrument, effect, or technique that neither of you can use for the entire session.",
+    "Mirror & Mutate\n\nPerson A plays an idea\nPerson B copies it exactly\nPerson B then distorts, bends, or mutates it",
+    "Tag-Team Timer\n\nAlternate control every 60–90 seconds\nWhen time’s up, hands off\nKeeps momentum and prevents spirals.",
+    "Finish My Thought\n\nPerson A starts an idea\nPerson B must finish it\nTests intuition and shared musical language.",
+    "One Leads, One Follows\n\nLeader sets tempo, feel, and direction\nFollower adapts instantly\nSwitch roles often\nFeels like a musical dance.",
+    "Carry the Torch\n\nPerson A starts an idea\nPerson B continues it without deleting anything\nPerson A cannot interfere\nA trust exercise disguised as music.",
+    "Reference Swap\n\nEach player brings a reference track\nYou must use the other person’s reference as inspiration for your part",
+    "Passing the Session (Splice Style)\n\nPerson A starts the session and adds one element\nPass the project to Person B to add one element\nRepeat until the track feels complete",
+    "Blind Composition (Layering)\n\nEach person creates a short musical part without hearing the other\nCombine all parts at once and listen together",
+    "Musical Hot Potato\n\nSet a fast timer\nEach person must add one sound, loop, or idea before time runs out\nImmediately pass control to the other",
+    "Genre-Switching Roulette\n\nTake an existing idea or melody\nApply a randomly chosen opposing genre\n(e.g. ambient → metal, folk → jazz)",
+    "Themed Soundtrack Challenge\n\nAgree on a vivid or silly scene prompt\nCreate a 30-second soundtrack together\n(e.g. “Aliens landing in a 1920s jazz club”)"
+  ],
+
+  unstuck: [
+    "Change your input. Listen to music outside your genre or revisit something that once inspired you.",
+    "Set a timer for 15 minutes. Give yourself permission to make garbage — momentum beats perfection.",
+    "Switch environments. Dim the lights, put on headphones, or work in a café — fresh context = fresh ideas.",
+    "Limit your tools. Pick one synth, one drum kit, one effect. Creativity thrives on constraint.",
+    "Jam without recording. Play freely, explore sounds with no pressure to “save” anything.",
+    "Mute everything but one sound. Rebuild around that.",
+    "Double something an octave up or down. Instant lift or depth.",
+    "Add a surprise element. Field recordings, percussive glitch, reversed pad, pitch-bent riser.",
+    "Introduce movement. Automate filters, reverb send, or modulation depth across time.",
+    "Change perspective. Swap the drum groove, invert chords, or reharmonize the bassline.",
+    "Draw an emotional arc. Label sections “calm,” “rising,” “ecstatic,” “afterglow” — then shape sound accordingly.",
+    "Borrow a structure from a song you love (e.g., intro → build → drop → break → outro).",
+    "Decide the purpose. Is this a club track? Ambient meditation? Film cue? It helps focus decisions.",
+    "Zoom out. Copy your loop for 3 minutes, automate textures, and mark potential transitions.",
+    "Introduce contrast. Make a “B-section” that flips energy or texture completely.",
+    "Pretend your DAW is a 90s sampler. Only 8 tracks, no plugins — make it work.",
+    "Roll a dice or randomize a parameter. Commit to the result.",
+    "Print everything to audio. Editing audio is often easier and more creative than endless tweaking.",
+    "Use “choose one” rules: Only one reverb, one synth, one modulation effect per project.",
+    "Pause to organize. Name tracks, color-code, freeze bloat — clarity helps creativity.",
+    "Delete your favorite part. Painful, but it often unlocks new directions.",
+    "Move on to sound design or percussion. You’re still making progress.",
+    "Bounce the section to stems, start a new project, and rearrange like Lego pieces.",
+    "Switch to arrangement view and force a beginning, middle, and end.",
+    "Ask: what’s this track about? If you can’t answer, define its emotional or narrative intent.",
+    "Change the tempo or halve/double it. Instant mood shift.",
+    "Change the sound palette. Replace instruments with acoustic samples or modular bleeps.",
+    "Reverse engineer the vibe of a favorite artist’s track using your own sounds.",
+    "Mash it with another unfinished project. Two half-ideas can make one whole track.",
+    "Add a completely different layer (spoken word, sampled radio, guitar, sitar, anything).",
+    "Do a low-stakes creative task: organize samples, name presets, tidy your project folder.",
+    "Journal about what you’re trying to express — words often reveal the missing emotion.",
+    "Listen to ambient or silence. Reset your sensory threshold.",
+    "Remind yourself that creative blocks are part of the cycle — every artist hits them.",
+    "Combine or cannibalize old ideas — mix bassline from one with drums from another.",
+    "End the session on a win: name one thing you learned or improved today.",
+    "🧭 Re-orient\n\nWhat am I actually doing right now — exploring, practicing, or finishing?\n\nIf this were just a sketch, would it already be “good enough”?\n\nWhat’s the smallest honest next action? (one sound, one note, one pass)",
+    "👂 Return to Listening\n\nWhat is already working in this sound?\n\nIf I mute everything but one track, what does it want?\n\nWhat happens if I stop trying to improve it and just respond to it?",
+    "🪶 Release Pressure\n\nWho am I trying to impress right now?\n\nWhat if this piece is allowed to be private forever?\n\nWhat would change if this was only for today?",
+    "🔁 Shift the Frame\n\nIs this a practice session pretending to be a masterpiece?\n\nWhat would I do differently if I only had 10 more minutes?\n\nWhat if the point is discovery, not outcome?",
+    "🌱 Remember Why\n\nWhat feeling or state pulled me into making music in the first place?\n\nWhere do I feel this sound in my body, if at all?\n\nWhat would it be like to trust my taste again?",
+    "🎲 Permission Slips (use one)\n\nI am allowed to make boring music today.\n\nI am allowed to stop before it makes sense.\n\nI am allowed to follow curiosity, not clarity.\n\nI am allowed to make something no one hears.",
+    "🕯️ Emergency Reset (60 seconds)\n\nClose eyes.\n\nListen to the loudest and quietest sound in the room.\n\nAsk: “What’s the most alive sound I could make right now?”\n\nDo only that, then stop."
+  ],
+
+  layers: [
+    "Sustained pads or drones — provide tonal grounding or emotional wash.",
+    "Short plucks or keys — rhythmic harmonic punctuation.",
+    "Counter-chords — use different inversions or extensions for color.",
+    "Filtered reverb tails — ghost harmonies subtly supporting the mix.",
+    "Granular resamples of your main chords for evolving texture.",
+    "Organ or synth-brass layers — thickens harmony and adds midrange power.",
+    "FM or wavetable pads — introduce harmonic movement through modulation.",
+    "Perc loops — metallic, organic, or foley-based shakers for swing.",
+    "Octave-doubled lead — brighter, more assertive melody.",
+    "Counter-melody — echoes or answers the main hook.",
+    "Call-and-response arps — two different synths trading phrases.",
+    "Layered unison synths — combine analog warmth + digital clarity.",
+    "Vocal chops / samples — human texture without lyrical focus.",
+    "Instrument imitation layers (guitar, flute, koto, bells) — hybrid identity.",
+    "Dissonant tension notes — automated fade-ins for drama.",
+    "Subtle hat or shaker ghost layers — widen groove without clutter.",
+    "Offbeat claps or snaps — add syncopation and human feel.",
+    "Rhythmic sidechain gates — pulsating pad movement.",
+    "Noise bursts or filtered white noise hits — enhance transients.",
+    "Percussive synth stabs — rhythmic motifs locked with drums.",
+    "Resampled glitch hits — fills or transitions for unpredictability.",
+    "Field recordings / ambient sounds (rain, city, forest, machines).",
+    "Vinyl crackle / tape hiss / air movement — lo-fi cohesion.",
+    "Granular or reversed pads — dreamy backdrop.",
+    "Long-reverb hits frozen into drones.",
+    "Subtle pitch-shifted harmonics — glisten above the mix.",
+    "Stereo noise washes — widen and fill high frequencies.",
+    "Evolving modulation — slow LFOs, chorus, or phaser on textures.",
+    "Sub sine / triangle wave — pure foundation.",
+    "Risers, downlifters, swells, whooshes.",
+    "Filtered noise sweeps tied to section changes.",
+    "Pitch-enveloped synth stabs — accent transitions.",
+    "Reverse cymbals or reverb tails.",
+    "Automated ambience — e.g., reverb size increases pre-drop.",
+    "Stuttered or granular fragments — recontextualize upcoming sound.",
+    "“Pre-echo” effects hinting at the next section’s texture.",
+    "Mid-bass grit layer — adds definition and character.",
+    "Sidechained bass pad — breathes with kick pattern.",
+    "Plucky sub-bass for rhythmic interest.",
+    "Layer with distortion in parallel — keep sub clean, saturate top.",
+    "Reese-style detuned bass for tension or transitions.",
+    "Octave-shifted bass harmonics to help translate on small speakers.",
+    "Distant reverb reflections — place elements in imagined space.",
+    "Binaural-panned textures — subtle head movement illusion.",
+    "Subtle delay tails with panning automation.",
+    "Reverse room tone — adds surreal glue.",
+    "Low-volume drones tuned a fifth above or below for emotional shift.",
+    "Off-grid rhythmic delays — create perceived complexity.",
+    "Resampled main instrument run through distortion / grain delay.",
+    "Spectral freeze / \nvocoder / convolution reverb on core sounds.",
+    "Random LFO modulation of parameters for organic unpredictability.",
+    "Feedback loops (tamed!) for evolving drones.",
+    "Microtonal detune layers — slight dissonance adds realism.",
+    "Found sounds turned into instruments — e.g., cutlery, breath, footsteps.",
+    "Subtle string or choir pad — lifts emotional tone.",
+    "Filtered piano reverb — nostalgic warmth.",
+    "Ambient guitar or synth swells — humanise digital edges.",
+    "Low-level tonal noise bed — glues mix like analog tape.",
+    "Drone that follows root motion — ties sections emotionally.",
+    "Reverb “ghost” send bus shared across elements for cohesion."
+  ]
+};
+
+// ===== App State =====
+let lastCategory = null;
+let lastPrimary = "";
+let lastSecondary = "";
+let samMode = false;
+
+// For Sam Mode: hide solo-focused categories (Start, Unstuck)
+const samAllowed = new Set(["develop", "layers", "games"]);
+
+function categoryName(key) {
+  return ({
+    start: "Ways to Start",
+    develop: "Ways to Develop",
+    layers: "Sound / Layer Suggestion",
+    unstuck: "Ways to Get Unstuck",
+    games: "Collaborative Game (Sam)"
+  })[key] || key;
+}
+
+function draw(category) {
+  if (samMode && !samAllowed.has(category)) {
+    category = "develop";
+  }
+
+  lastCategory = category;
+  const list = prompts[category] || [];
+  const card = list[Math.floor(Math.random() * list.length)] || "(No prompts found)";
+  lastPrimary = card;
+  lastSecondary = "";
+
+  document.getElementById("categoryLabel").textContent = categoryName(category);
+  document.getElementById("card").textContent = card;
+  hideSecondary();
+}
+
+function reroll() {
+  if (!lastCategory) {
+    draw(samMode ? "develop" : "start");
+  } else {
+    draw(lastCategory);
+  }
+}
+
+function stackSecondary() {
+  if (lastCategory !== "develop") {
+    // Only stack develop (as you requested)
+    document.getElementById("secondaryWrap").style.display = "block";
+    document.getElementById("secondaryCard").textContent =
+      "Stacking is only for Develop.\n\nTip: Tap Ways to Develop first, then Stack.";
+    return;
+  }
+
+  const list = prompts.develop || [];
+  if (!list.length) return;
+
+  let candidate = list[Math.floor(Math.random() * list.length)];
+  // Avoid identical re-draw if possible
+  let attempts = 0;
+  while (candidate === lastPrimary && attempts < 8) {
+    candidate = list[Math.floor(Math.random() * list.length)];
+    attempts++;
+  }
+  lastSecondary = candidate;
+
+  document.getElementById("secondaryWrap").style.display = "block";
+  document.getElementById("secondaryCard").textContent = candidate;
+}
+
+function hideSecondary() {
+  document.getElementById("secondaryWrap").style.display = "none";
+  document.getElementById("secondaryCard").textContent = "";
+}
+
+function copyCard() {
+  const text =
+    (lastCategory ? `Category: ${categoryName(lastCategory)}\n\n` : "") +
+    (lastPrimary ? `PRIMARY:\n${lastPrimary}\n` : "") +
+    (lastSecondary ? `\nSECONDARY (STACK):\n${lastSecondary}\n` : "");
+
+  if (!text.trim()) return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    // Tiny feedback by flashing the mode label
+    const el = document.getElementById("modeLabel");
+    const old = el.textContent;
+    el.textContent = "Copied ✓";
+    setTimeout(() => el.textContent = old, 900);
+  }).catch(() => {
+    alert("Could not copy. (iPhone sometimes blocks copy unless triggered directly.)");
+  });
+}
+
+function toggleSamMode() {
+  samMode = !samMode;
+  document.getElementById("modeLabel").textContent = samMode ? "Mode: Sam" : "Mode: Normal";
+
+  // If in Sam mode and current category isn't allowed, auto-switch
+  if (samMode && lastCategory && !samAllowed.has(lastCategory)) {
+    draw("develop");
+  }
+}
+</script>
+
+</body>
+</html>
