@@ -10,141 +10,231 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 <style>
-  :root { --bg:#000; --panel:#111; --panel2:#0b0b0b; --text:#fff; --muted:#bdbdbd; --line:#222; }
-  body {
+  :root {
+    --bg:#000;
+    --panel:#111;
+    --panel2:#0b0b0b;
+    --text:#fff;
+    --muted:#bdbdbd;
+    --line:#222;
+    --btn:#141414;
+    --btn2:#101010;
+    --btnActive:#222;
+  }
+  body{
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    margin: 0;
-    padding: 16px;
+    margin:0;
+    padding:16px;
   }
-  h1 {
-    text-align: center;
-    font-size: 1.35rem;
-    margin: 8px 0 14px;
-    letter-spacing: 0.2px;
+  .wrap{ max-width: 820px; margin: 0 auto; }
+  h1{
+    text-align:center;
+    font-size:1.35rem;
+    margin:8px 0 14px;
+    letter-spacing:.2px;
   }
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
+  .row{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-bottom:12px;
   }
-  .row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  button {
-    width: 100%;
-    padding: 14px 12px;
-    font-size: 1rem;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: #141414;
+  button{
+    width:100%;
+    padding:14px 12px;
+    font-size:1rem;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background: var(--btn);
     color: var(--text);
   }
-  button:active { background: #222; }
-  .panel {
-    border: 1px solid var(--line);
-    border-radius: 14px;
+  button:active{ background: var(--btnActive); }
+  .panel{
+    border:1px solid var(--line);
+    border-radius:14px;
     background: var(--panel);
-    padding: 14px;
+    padding:14px;
   }
-  .titlebar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 10px;
+  .titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
   }
-  .tag {
-    font-size: 0.8rem;
+  .tag{
+    font-size:0.8rem;
     color: var(--muted);
-    border: 1px solid var(--line);
+    border:1px solid var(--line);
     background: var(--panel2);
-    padding: 6px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
+    padding:6px 10px;
+    border-radius:999px;
+    white-space:nowrap;
   }
-  #card {
-    white-space: pre-wrap;
-    line-height: 1.45;
-    font-size: 1rem;
+
+  /* Card */
+  #card{
+    white-space:pre-wrap;
+    line-height:1.5;
+    font-size:1rem;
   }
-  .small {
-    opacity: 0.75;
-    font-size: 0.85rem;
+  .small{ opacity:.75; font-size:.9rem; }
+
+  /* Actions */
+  .actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
   }
-  .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 12px;
+  .actions button{
+    padding:12px;
+    font-size:.95rem;
+    background: var(--btn2);
   }
-  .actions button {
-    padding: 12px;
-    font-size: 0.95rem;
-    background: #101010;
+
+  /* Secondary stack */
+  #secondaryWrap{
+    display:none;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--line);
   }
-  .divider {
-    height: 1px;
-    background: var(--line);
-    margin: 12px 0;
+  #secondaryTitle{
+    display:inline-block;
+    margin-bottom:8px;
   }
-  .note {
+  #secondaryCard{
+    white-space:pre-wrap;
+    line-height:1.5;
+  }
+
+  /* Timer */
+  .timerBox{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--line);
+    display:grid;
+    gap:10px;
+  }
+  .timerRow{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  select, input{
+    background: var(--panel2);
+    color: var(--text);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 10px;
+    font-size:.95rem;
+  }
+  input{ width: 110px; }
+  .timerDisplay{
+    font-variant-numeric: tabular-nums;
+    font-weight:700;
+    letter-spacing:.3px;
+  }
+  .note{
     color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-size:.85rem;
+    line-height:1.4;
+  }
+
+  /* Formatted cards (Games/Homework) */
+  .fmtTitle{
+    font-weight:900;
+    font-size:1.05rem;
+    margin-bottom:8px;
+  }
+  .fmtSteps{
+    margin:0;
+    padding-left:18px;
+  }
+  .fmtSteps li{
+    margin:6px 0;
+  }
+  .fmtHint{
+    margin-top:10px;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.45;
   }
 </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <h1>Creative Music Prompts</h1>
+<div class="wrap">
+  <h1>Creative Music Prompts</h1>
 
-    <div class="row">
-      <button onclick="draw('start')">Ways to Start</button>
-      <button onclick="draw('develop')">Ways to Develop (stackable)</button>
-      <button onclick="draw('layers')">Sound / Layer Suggestion</button>
-      <button onclick="draw('unstuck')">Ways to Get Unstuck</button>
-      <button onclick="draw('games')">Collaborative Game (Sam)</button>
+  <div class="row">
+    <button onclick="draw('start')">Ways to Start</button>
+    <button onclick="draw('develop')">Ways to Develop</button>
+    <button onclick="draw('layers')">Sound / Layer Suggestion</button>
+    <button onclick="draw('unstuck')">Ways to Get Unstuck</button>
+    <button onclick="draw('games')">Collaborative Game</button>
+    <button onclick="draw('homework')">Homework (next session)</button>
+  </div>
+
+  <div class="panel">
+    <div class="titlebar">
+      <div id="categoryLabel" class="tag">Tap a category</div>
+      <div id="repeatLabel" class="tag">No repeats: ON</div>
     </div>
 
-    <div class="panel">
-      <div class="titlebar">
-        <div id="categoryLabel" class="tag">Tap a category</div>
-        <div id="modeLabel" class="tag">Mode: Normal</div>
+    <div id="card" class="small">Tap a category button above to draw a prompt.</div>
+
+    <div id="secondaryWrap">
+      <div id="secondaryTitle" class="tag">Secondary (stack)</div>
+      <div id="secondaryCard"></div>
+    </div>
+
+    <div class="actions">
+      <button onclick="reroll()">Re-roll</button>
+      <button onclick="copyCard()">Copy</button>
+      <button onclick="stackSecondary()">Stack (Develop/Layers)</button>
+      <button onclick="clearStack()">Clear Stack</button>
+    </div>
+
+    <div class="timerBox">
+      <div class="timerRow">
+        <span class="tag">Timer</span>
+        <select id="timerPreset" onchange="onPresetChange()">
+          <option value="1">1 min</option>
+          <option value="5">5 min</option>
+          <option value="10" selected>10 min</option>
+          <option value="15">15 min</option>
+          <option value="25">25 min</option>
+          <option value="45">45 min</option>
+          <option value="60">60 min</option>
+          <option value="custom">Custom</option>
+        </select>
+        <input id="timerCustom" type="number" min="1" max="240" placeholder="mins" style="display:none;" />
+        <span class="tag timerDisplay" id="timerDisplay">10:00</span>
       </div>
 
-      <div id="card" class="small">Tap a category button above to draw a prompt.</div>
-
-      <div id="secondaryWrap" style="display:none;">
-        <div class="divider"></div>
-        <div class="tag" style="display:inline-block;margin-bottom:8px;">Secondary (stack)</div>
-        <div id="secondaryCard" style="white-space:pre-wrap;line-height:1.45;"></div>
+      <div class="timerRow">
+        <button onclick="startPauseTimer()" id="timerStartBtn">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+        <button onclick="setTimerToCardDefault()">Set to Card Default</button>
       </div>
 
-      <div class="actions">
-        <button onclick="reroll()">Re-roll</button>
-        <button onclick="copyCard()">Copy</button>
-        <button onclick="toggleSamMode()">Sam Mode</button>
-        <button onclick="stackSecondary()">Stack (Develop only)</button>
-      </div>
-
-      <div class="divider"></div>
       <div class="note">
-        • Sam Mode hides solo-focused choices (keeps Develop / Layers / Games).<br/>
-        • “Stack” only works for Develop: it draws a second develop card to combine.
+        Tip: draw a card → hit <b>Set to Card Default</b> → Start.
       </div>
     </div>
   </div>
+</div>
 
 <script>
-/**
- * FULL PROMPT PACK — from your inputs
- * Everything is stored as plain strings for maximum simplicity.
- */
+/* =========================
+   YOUR PROMPTS
+   ========================= */
 
 const prompts = {
   start: [
@@ -239,68 +329,6 @@ const prompts = {
     "Use saturation or tape effects to “age” sections differently."
   ],
 
-  games: [
-    "No Talking While Playing\n\nCommunicate only through sound.\n(No verbal cues once the music starts.)",
-    "Forbidden Tool\n\nAgree on one instrument, effect, or technique that neither of you can use for the entire session.",
-    "Mirror & Mutate\n\nPerson A plays an idea\nPerson B copies it exactly\nPerson B then distorts, bends, or mutates it",
-    "Tag-Team Timer\n\nAlternate control every 60–90 seconds\nWhen time’s up, hands off\nKeeps momentum and prevents spirals.",
-    "Finish My Thought\n\nPerson A starts an idea\nPerson B must finish it\nTests intuition and shared musical language.",
-    "One Leads, One Follows\n\nLeader sets tempo, feel, and direction\nFollower adapts instantly\nSwitch roles often\nFeels like a musical dance.",
-    "Carry the Torch\n\nPerson A starts an idea\nPerson B continues it without deleting anything\nPerson A cannot interfere\nA trust exercise disguised as music.",
-    "Reference Swap\n\nEach player brings a reference track\nYou must use the other person’s reference as inspiration for your part",
-    "Passing the Session (Splice Style)\n\nPerson A starts the session and adds one element\nPass the project to Person B to add one element\nRepeat until the track feels complete",
-    "Blind Composition (Layering)\n\nEach person creates a short musical part without hearing the other\nCombine all parts at once and listen together",
-    "Musical Hot Potato\n\nSet a fast timer\nEach person must add one sound, loop, or idea before time runs out\nImmediately pass control to the other",
-    "Genre-Switching Roulette\n\nTake an existing idea or melody\nApply a randomly chosen opposing genre\n(e.g. ambient → metal, folk → jazz)",
-    "Themed Soundtrack Challenge\n\nAgree on a vivid or silly scene prompt\nCreate a 30-second soundtrack together\n(e.g. “Aliens landing in a 1920s jazz club”)"
-  ],
-
-  unstuck: [
-    "Change your input. Listen to music outside your genre or revisit something that once inspired you.",
-    "Set a timer for 15 minutes. Give yourself permission to make garbage — momentum beats perfection.",
-    "Switch environments. Dim the lights, put on headphones, or work in a café — fresh context = fresh ideas.",
-    "Limit your tools. Pick one synth, one drum kit, one effect. Creativity thrives on constraint.",
-    "Jam without recording. Play freely, explore sounds with no pressure to “save” anything.",
-    "Mute everything but one sound. Rebuild around that.",
-    "Double something an octave up or down. Instant lift or depth.",
-    "Add a surprise element. Field recordings, percussive glitch, reversed pad, pitch-bent riser.",
-    "Introduce movement. Automate filters, reverb send, or modulation depth across time.",
-    "Change perspective. Swap the drum groove, invert chords, or reharmonize the bassline.",
-    "Draw an emotional arc. Label sections “calm,” “rising,” “ecstatic,” “afterglow” — then shape sound accordingly.",
-    "Borrow a structure from a song you love (e.g., intro → build → drop → break → outro).",
-    "Decide the purpose. Is this a club track? Ambient meditation? Film cue? It helps focus decisions.",
-    "Zoom out. Copy your loop for 3 minutes, automate textures, and mark potential transitions.",
-    "Introduce contrast. Make a “B-section” that flips energy or texture completely.",
-    "Pretend your DAW is a 90s sampler. Only 8 tracks, no plugins — make it work.",
-    "Roll a dice or randomize a parameter. Commit to the result.",
-    "Print everything to audio. Editing audio is often easier and more creative than endless tweaking.",
-    "Use “choose one” rules: Only one reverb, one synth, one modulation effect per project.",
-    "Pause to organize. Name tracks, color-code, freeze bloat — clarity helps creativity.",
-    "Delete your favorite part. Painful, but it often unlocks new directions.",
-    "Move on to sound design or percussion. You’re still making progress.",
-    "Bounce the section to stems, start a new project, and rearrange like Lego pieces.",
-    "Switch to arrangement view and force a beginning, middle, and end.",
-    "Ask: what’s this track about? If you can’t answer, define its emotional or narrative intent.",
-    "Change the tempo or halve/double it. Instant mood shift.",
-    "Change the sound palette. Replace instruments with acoustic samples or modular bleeps.",
-    "Reverse engineer the vibe of a favorite artist’s track using your own sounds.",
-    "Mash it with another unfinished project. Two half-ideas can make one whole track.",
-    "Add a completely different layer (spoken word, sampled radio, guitar, sitar, anything).",
-    "Do a low-stakes creative task: organize samples, name presets, tidy your project folder.",
-    "Journal about what you’re trying to express — words often reveal the missing emotion.",
-    "Listen to ambient or silence. Reset your sensory threshold.",
-    "Remind yourself that creative blocks are part of the cycle — every artist hits them.",
-    "Combine or cannibalize old ideas — mix bassline from one with drums from another.",
-    "End the session on a win: name one thing you learned or improved today.",
-    "🧭 Re-orient\n\nWhat am I actually doing right now — exploring, practicing, or finishing?\n\nIf this were just a sketch, would it already be “good enough”?\n\nWhat’s the smallest honest next action? (one sound, one note, one pass)",
-    "👂 Return to Listening\n\nWhat is already working in this sound?\n\nIf I mute everything but one track, what does it want?\n\nWhat happens if I stop trying to improve it and just respond to it?",
-    "🪶 Release Pressure\n\nWho am I trying to impress right now?\n\nWhat if this piece is allowed to be private forever?\n\nWhat would change if this was only for today?",
-    "🔁 Shift the Frame\n\nIs this a practice session pretending to be a masterpiece?\n\nWhat would I do differently if I only had 10 more minutes?\n\nWhat if the point is discovery, not outcome?",
-    "🌱 Remember Why\n\nWhat feeling or state pulled me into making music in the first place?\n\nWhere do I feel this sound in my body, if at all?\n\nWhat would it be like to trust my taste again?",
-    "🎲 Permission Slips (use one)\n\nI am allowed to make boring music today.\n\nI am allowed to stop before it makes sense.\n\nI am allowed to follow curiosity, not clarity.\n\nI am allowed to make something no one hears.",
-    "🕯️ Emergency Reset (60 seconds)\n\nClose eyes.\n\nListen to the loudest and quietest sound in the room.\n\nAsk: “What’s the most alive sound I could make right now?”\n\nDo only that, then stop."
-  ],
-
   layers: [
     "Sustained pads or drones — provide tonal grounding or emotional wash.",
     "Short plucks or keys — rhythmic harmonic punctuation.",
@@ -362,110 +390,444 @@ const prompts = {
     "Low-level tonal noise bed — glues mix like analog tape.",
     "Drone that follows root motion — ties sections emotionally.",
     "Reverb “ghost” send bus shared across elements for cohesion."
+  ],
+
+  unstuck: [
+    "Change your input. Listen to music outside your genre or revisit something that once inspired you.",
+    "Set a timer for 15 minutes. Give yourself permission to make garbage — momentum beats perfection.",
+    "Switch environments. Dim the lights, put on headphones, or work in a café — fresh context = fresh ideas.",
+    "Limit your tools. Pick one synth, one drum kit, one effect. Creativity thrives on constraint.",
+    "Jam without recording. Play freely, explore sounds with no pressure to “save” anything.",
+    "Mute everything but one sound. Rebuild around that.",
+    "Double something an octave up or down. Instant lift or depth.",
+    "Add a surprise element. Field recordings, percussive glitch, reversed pad, pitch-bent riser.",
+    "Introduce movement. Automate filters, reverb send, or modulation depth across time.",
+    "Change perspective. Swap the drum groove, invert chords, or reharmonize the bassline.",
+    "Draw an emotional arc. Label sections “calm,” “rising,” “ecstatic,” “afterglow” — then shape sound accordingly.",
+    "Borrow a structure from a song you love (e.g., intro → build → drop → break → outro).",
+    "Decide the purpose. Is this a club track? Ambient meditation? Film cue? It helps focus decisions.",
+    "Zoom out. Copy your loop for 3 minutes, automate textures, and mark potential transitions.",
+    "Introduce contrast. Make a “B-section” that flips energy or texture completely.",
+    "Pretend your DAW is a 90s sampler. Only 8 tracks, no plugins — make it work.",
+    "Roll a dice or randomize a parameter. Commit to the result.",
+    "Print everything to audio. Editing audio is often easier and more creative than endless tweaking.",
+    "Use “choose one” rules: Only one reverb, one synth, one modulation effect per project.",
+    "Pause to organize. Name tracks, color-code, freeze bloat — clarity helps creativity.",
+    "Delete your favorite part. Painful, but it often unlocks new directions.",
+    "Move on to sound design or percussion. You’re still making progress.",
+    "Bounce the section to stems, start a new project, and rearrange like Lego pieces.",
+    "Switch to arrangement view and force a beginning, middle, and end.",
+    "Ask: what’s this track about? If you can’t answer, define its emotional or narrative intent.",
+    "Change the tempo or halve/double it. Instant mood shift.",
+    "Change the sound palette. Replace instruments with acoustic samples or modular bleeps.",
+    "Reverse engineer the vibe of a favorite artist’s track using your own sounds.",
+    "Mash it with another unfinished project. Two half-ideas can make one whole track.",
+    "Add a completely different layer (spoken word, sampled radio, guitar, sitar, anything).",
+    "Do a low-stakes creative task: organize samples, name presets, tidy your project folder.",
+    "Journal about what you’re trying to express — words often reveal the missing emotion.",
+    "Listen to ambient or silence. Reset your sensory threshold.",
+    "Remind yourself that creative blocks are part of the cycle — every artist hits them.",
+    "Combine or cannibalize old ideas — mix bassline from one with drums from another.",
+    "End the session on a win: name one thing you learned or improved today.",
+    "🧭 Re-orient\n\nWhat am I actually doing right now — exploring, practicing, or finishing?\n\nIf this were just a sketch, would it already be “good enough”?\n\nWhat’s the smallest honest next action? (one sound, one note, one pass)",
+    "👂 Return to Listening\n\nWhat is already working in this sound?\n\nIf I mute everything but one track, what does it want?\n\nWhat happens if I stop trying to improve it and just respond to it?",
+    "🪶 Release Pressure\n\nWho am I trying to impress right now?\n\nWhat if this piece is allowed to be private forever?\n\nWhat would change if this was only for today?",
+    "🔁 Shift the Frame\n\nIs this a practice session pretending to be a masterpiece?\n\nWhat would I do differently if I only had 10 more minutes?\n\nWhat if the point is discovery, not outcome?",
+    "🌱 Remember Why\n\nWhat feeling or state pulled me into making music in the first place?\n\nWhere do I feel this sound in my body, if at all?\n\nWhat would it be like to trust my taste again?",
+    "🎲 Permission Slips (use one)\n\nI am allowed to make boring music today.\n\nI am allowed to stop before it makes sense.\n\nI am allowed to follow curiosity, not clarity.\n\nI am allowed to make something no one hears.",
+    "🕯️ Emergency Reset (60 seconds)\n\nClose eyes.\n\nListen to the loudest and quietest sound in the room.\n\nAsk: “What’s the most alive sound I could make right now?”\n\nDo only that, then stop."
   ]
 };
 
-// ===== App State =====
+/* =========================
+   FORMATTED CATEGORIES
+   ========================= */
+
+const games = [
+  { title: "No Talking While Playing", steps: [
+    "Communicate only through sound.",
+    "No verbal cues once the music starts."
+  ]},
+  { title: "Forbidden Tool", steps: [
+    "Agree on one instrument, effect, or technique neither of you can use for the entire session."
+  ]},
+  { title: "Mirror & Mutate", steps: [
+    "Person A plays an idea.",
+    "Person B copies it exactly.",
+    "Person B distorts, bends, or mutates it."
+  ]},
+  { title: "Tag-Team Timer", steps: [
+    "Alternate control every 60–90 seconds.",
+    "When time’s up, hands off."
+  ]},
+  { title: "Finish My Thought", steps: [
+    "Person A starts an idea.",
+    "Person B must finish it."
+  ]},
+  { title: "One Leads, One Follows", steps: [
+    "Leader sets tempo/feel/direction.",
+    "Follower adapts instantly.",
+    "Switch roles often."
+  ]},
+  { title: "Carry the Torch", steps: [
+    "Person A starts an idea.",
+    "Person B continues it without deleting anything.",
+    "Person A cannot interfere."
+  ]},
+  { title: "Reference Swap", steps: [
+    "Each brings a reference track.",
+    "Use the other person’s reference as inspiration for your part."
+  ]},
+  { title: "Passing the Session (Splice Style)", steps: [
+    "A adds one element.",
+    "Pass to B to add one element.",
+    "Repeat until the track feels complete."
+  ]},
+  { title: "Blind Composition (Layering)", steps: [
+    "Each creates a short part without hearing the other.",
+    "Combine all parts at once and listen together."
+  ]},
+  { title: "Musical Hot Potato", steps: [
+    "Fast timer.",
+    "Each adds one sound/loop/idea before time runs out.",
+    "Immediately pass control."
+  ]},
+  { title: "Genre-Switching Roulette", steps: [
+    "Take an existing idea or melody.",
+    "Apply a randomly chosen opposing genre."
+  ]},
+  { title: "Themed Soundtrack Challenge", steps: [
+    "Agree on a vivid or silly scene prompt.",
+    "Create a 30-second soundtrack together."
+  ]}
+];
+
+const homework = [
+  { title: "1) The Seed & The Soil", steps: [
+    "A: Create a short, simple musical seed (10–30 seconds). One idea only.",
+    "B: Create textures, harmonies, or rhythms that could support an unknown seed.",
+    "Bring both, combine fresh."
+  ]},
+  { title: "2) Rhythm vs Atmosphere", steps: [
+    "A: Build a rhythm or pulse with no harmony.",
+    "B: Build a harmonic or textural piece with no rhythm.",
+    "Merge and negotiate space."
+  ]},
+  { title: "3) Emotion Translator", steps: [
+    "A: Choose a specific emotion or memory and translate it into sound.",
+    "B: Choose the opposite emotion and translate that.",
+    "See what happens when both coexist."
+  ]},
+  { title: "4) Reference Exchange", steps: [
+    "A: Pick a reference track and recreate one aspect of it.",
+    "B: Pick a different reference track and recreate a different aspect.",
+    "Do not tell each other what you chose."
+  ]},
+  { title: "5) Minimal vs Maximal", steps: [
+    "A: Create the most minimal version of an idea you can.",
+    "B: Create the most maximal version of an idea you can.",
+    "Combine and sculpt together."
+  ]},
+  { title: "6) Constraint Twins", steps: [
+    "A: Write something using only one instrument or sound source.",
+    "B: Write something while banning that same instrument or source.",
+    "Forces non-overlap."
+  ]},
+  { title: "7) Call & Response Prep", steps: [
+    "A: Write a short musical “question.”",
+    "B: Write a short musical “answer.”",
+    "Do not hear each other’s work beforehand."
+  ]},
+  { title: "8) Field vs Studio", steps: [
+    "A: Capture a field recording or organic sound.",
+    "B: Create a synthetic or heavily processed sound.",
+    "Fuse nature + machine."
+  ]},
+  { title: "9) Structure vs Freedom", steps: [
+    "A: Create a rigid structure (tempo map, form, chord cycle).",
+    "B: Create free material with no structure at all.",
+    "Let structure tame freedom (or vice versa)."
+  ]},
+  { title: "10) Sound Identity", steps: [
+    "A: Design one signature sound you love.",
+    "B: Design one sound you actively dislike.",
+    "Decide which one survives."
+  ]},
+  { title: "11) Unfinished Business", steps: [
+    "A: Bring an unfinished idea you’ve abandoned.",
+    "B: Bring a brand-new idea made quickly.",
+    "Swap them and continue each other’s work."
+  ]},
+  { title: "12) Silence & Density", steps: [
+    "A: Compose something sparse with lots of silence.",
+    "B: Compose something dense and continuous.",
+    "Find the meeting point."
+  ]},
+  { title: "13) Tempo Polarity", steps: [
+    "A: Write something very slow.",
+    "B: Write something very fast.",
+    "Stretch or compress to meet."
+  ]},
+  { title: "14) Mood Without Genre", steps: [
+    "A: Create a piece focused purely on mood.",
+    "B: Create a piece focused purely on technique.",
+    "Blend feeling and craft."
+  ]},
+  { title: "15) One-Minute World", steps: [
+    "A: Create a complete one-minute piece.",
+    "B: Create a loop that could run forever.",
+    "Decide where it begins and ends."
+  ]},
+  { title: "🧠 How to Use (without overwhelm)", steps: [
+    "Pick 1 homework pair per week.",
+    "Keep each piece under 1 minute.",
+    "Don’t polish — sketch energy only.",
+    "Bring raw files, not finished tracks."
+  ]}
+];
+
+/* =========================
+   APP STATE + NO REPEATS
+   ========================= */
+
 let lastCategory = null;
-let lastPrimary = "";
-let lastSecondary = "";
-let samMode = false;
+let lastPrimary = null;   // string or object
+let lastSecondary = null; // string
 
-// For Sam Mode: hide solo-focused categories (Start, Unstuck)
-const samAllowed = new Set(["develop", "layers", "games"]);
+const recentPicks = {
+  start: [],
+  develop: [],
+  layers: [],
+  unstuck: [],
+  games: [],
+  homework: []
+};
 
-function categoryName(key) {
+const NO_REPEAT_BUFFER = 2;
+
+function categoryName(key){
   return ({
     start: "Ways to Start",
     develop: "Ways to Develop",
     layers: "Sound / Layer Suggestion",
     unstuck: "Ways to Get Unstuck",
-    games: "Collaborative Game (Sam)"
+    games: "Collaborative Game",
+    homework: "Homework (next session)"
   })[key] || key;
 }
 
-function draw(category) {
-  if (samMode && !samAllowed.has(category)) {
-    category = "develop";
+function pickIndexNoRepeat(total, category){
+  if (total <= 1) return 0;
+  const recent = recentPicks[category] || [];
+  let idx = Math.floor(Math.random() * total);
+  let attempts = 0;
+  while (recent.includes(idx) && attempts < 30) {
+    idx = Math.floor(Math.random() * total);
+    attempts++;
   }
+  recentPicks[category] = [idx, ...recent].slice(0, NO_REPEAT_BUFFER);
+  return idx;
+}
 
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function renderFormatted(obj, targetEl, hintText){
+  targetEl.innerHTML = `
+    <div class="fmtTitle">${escapeHtml(obj.title)}</div>
+    <ul class="fmtSteps">
+      ${obj.steps.map(s => `<li>${escapeHtml(s)}</li>`).join("")}
+    </ul>
+    ${hintText ? `<div class="fmtHint">${escapeHtml(hintText)}</div>` : ``}
+  `;
+}
+
+function renderPlain(text, targetEl){
+  targetEl.textContent = text;
+}
+
+function draw(category){
   lastCategory = category;
-  const list = prompts[category] || [];
-  const card = list[Math.floor(Math.random() * list.length)] || "(No prompts found)";
-  lastPrimary = card;
-  lastSecondary = "";
-
   document.getElementById("categoryLabel").textContent = categoryName(category);
-  document.getElementById("card").textContent = card;
-  hideSecondary();
-}
+  clearStack();
 
-function reroll() {
-  if (!lastCategory) {
-    draw(samMode ? "develop" : "start");
-  } else {
-    draw(lastCategory);
-  }
-}
-
-function stackSecondary() {
-  if (lastCategory !== "develop") {
-    // Only stack develop (as you requested)
-    document.getElementById("secondaryWrap").style.display = "block";
-    document.getElementById("secondaryCard").textContent =
-      "Stacking is only for Develop.\n\nTip: Tap Ways to Develop first, then Stack.";
+  if (category === "games") {
+    const idx = pickIndexNoRepeat(games.length, "games");
+    lastPrimary = games[idx];
+    renderFormatted(lastPrimary, document.getElementById("card"), "Optional: set timer 10 min and commit.");
     return;
   }
 
-  const list = prompts.develop || [];
-  if (!list.length) return;
-
-  let candidate = list[Math.floor(Math.random() * list.length)];
-  // Avoid identical re-draw if possible
-  let attempts = 0;
-  while (candidate === lastPrimary && attempts < 8) {
-    candidate = list[Math.floor(Math.random() * list.length)];
-    attempts++;
+  if (category === "homework") {
+    const idx = pickIndexNoRepeat(homework.length, "homework");
+    lastPrimary = homework[idx];
+    renderFormatted(lastPrimary, document.getElementById("card"), "Keep each piece under 1 minute. Bring raw files.");
+    return;
   }
-  lastSecondary = candidate;
 
-  document.getElementById("secondaryWrap").style.display = "block";
-  document.getElementById("secondaryCard").textContent = candidate;
+  const list = prompts[category] || [];
+  const idx = pickIndexNoRepeat(list.length, category);
+  lastPrimary = list[idx] || "(No prompts found)";
+  renderPlain(lastPrimary, document.getElementById("card"));
 }
 
-function hideSecondary() {
+function reroll(){
+  if (!lastCategory) draw("start");
+  else draw(lastCategory);
+}
+
+/* =========================
+   STACKING (Develop/Layers)
+   ========================= */
+
+function stackSecondary(){
+  if (!lastCategory || (lastCategory !== "develop" && lastCategory !== "layers")) {
+    showSecondary("Stacking only works for Develop or Layers.\n\nTip: draw Develop or Layers first, then Stack.");
+    return;
+  }
+  const list = prompts[lastCategory] || [];
+  if (!list.length) return;
+
+  let idx = pickIndexNoRepeat(list.length, lastCategory);
+  let candidate = list[idx];
+
+  let tries = 0;
+  while (candidate === lastPrimary && tries < 20) {
+    idx = pickIndexNoRepeat(list.length, lastCategory);
+    candidate = list[idx];
+    tries++;
+  }
+
+  lastSecondary = candidate;
+  showSecondary(candidate);
+}
+
+function showSecondary(text){
+  const wrap = document.getElementById("secondaryWrap");
+  const card = document.getElementById("secondaryCard");
+  wrap.style.display = "block";
+  card.textContent = text;
+}
+
+function clearStack(){
+  lastSecondary = null;
   document.getElementById("secondaryWrap").style.display = "none";
   document.getElementById("secondaryCard").textContent = "";
 }
 
-function copyCard() {
-  const text =
-    (lastCategory ? `Category: ${categoryName(lastCategory)}\n\n` : "") +
-    (lastPrimary ? `PRIMARY:\n${lastPrimary}\n` : "") +
-    (lastSecondary ? `\nSECONDARY (STACK):\n${lastSecondary}\n` : "");
+/* =========================
+   COPY
+   ========================= */
 
-  if (!text.trim()) return;
+function copyCard(){
+  if (!lastCategory || !lastPrimary) return;
+
+  let text = `Category: ${categoryName(lastCategory)}\n\n`;
+
+  if (lastCategory === "games" || lastCategory === "homework") {
+    text += `${lastCategory.toUpperCase()}: ${lastPrimary.title}\n`;
+    for (const s of lastPrimary.steps) text += `- ${s}\n`;
+  } else {
+    text += `PRIMARY:\n${lastPrimary}\n`;
+    if (lastSecondary) text += `\nSECONDARY (STACK):\n${lastSecondary}\n`;
+  }
 
   navigator.clipboard.writeText(text).then(() => {
-    // Tiny feedback by flashing the mode label
-    const el = document.getElementById("modeLabel");
-    const old = el.textContent;
-    el.textContent = "Copied ✓";
-    setTimeout(() => el.textContent = old, 900);
+    flashTag("repeatLabel", "Copied ✓", 900);
   }).catch(() => {
-    alert("Could not copy. (iPhone sometimes blocks copy unless triggered directly.)");
+    alert("Could not copy (some iPhones block copy in certain contexts).");
   });
 }
 
-function toggleSamMode() {
-  samMode = !samMode;
-  document.getElementById("modeLabel").textContent = samMode ? "Mode: Sam" : "Mode: Normal";
+function flashTag(id, msg, ms){
+  const el = document.getElementById(id);
+  const old = el.textContent;
+  el.textContent = msg;
+  setTimeout(() => el.textContent = old, ms);
+}
 
-  // If in Sam mode and current category isn't allowed, auto-switch
-  if (samMode && lastCategory && !samAllowed.has(lastCategory)) {
-    draw("develop");
+/* =========================
+   TIMER
+   ========================= */
+
+let timerTotalSec = 10 * 60;
+let timerRemainingSec = timerTotalSec;
+let timerRunning = false;
+let timerHandle = null;
+
+function formatTime(sec){
+  sec = Math.max(0, Math.floor(sec));
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2,"0")}`;
+}
+function updateTimerDisplay(){
+  document.getElementById("timerDisplay").textContent = formatTime(timerRemainingSec);
+}
+function getSelectedMinutes(){
+  const preset = document.getElementById("timerPreset").value;
+  if (preset === "custom") {
+    const v = parseInt(document.getElementById("timerCustom").value, 10);
+    return isFinite(v) && v > 0 ? v : 10;
+  }
+  return parseInt(preset, 10);
+}
+function onPresetChange(){
+  const preset = document.getElementById("timerPreset").value;
+  const custom = document.getElementById("timerCustom");
+  custom.style.display = (preset === "custom") ? "inline-block" : "none";
+  resetTimer();
+}
+function resetTimer(){
+  stopTimerInternal();
+  const mins = getSelectedMinutes();
+  timerTotalSec = mins * 60;
+  timerRemainingSec = timerTotalSec;
+  updateTimerDisplay();
+  document.getElementById("timerStartBtn").textContent = "Start";
+}
+function startPauseTimer(){
+  if (!timerRunning) {
+    timerRunning = true;
+    document.getElementById("timerStartBtn").textContent = "Pause";
+    timerHandle = setInterval(() => {
+      timerRemainingSec -= 1;
+      updateTimerDisplay();
+      if (timerRemainingSec <= 0) {
+        stopTimerInternal();
+        timerRemainingSec = 0;
+        updateTimerDisplay();
+        document.getElementById("timerStartBtn").textContent = "Start";
+        flashTag("repeatLabel", "Timer done ✓", 1200);
+        if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
+      }
+    }, 1000);
+  } else {
+    stopTimerInternal();
+    document.getElementById("timerStartBtn").textContent = "Start";
   }
 }
+function stopTimerInternal(){
+  timerRunning = false;
+  if (timerHandle) {
+    clearInterval(timerHandle);
+    timerHandle = null;
+  }
+}
+function setTimerToCardDefault(){
+  const defaults = { start:10, develop:15, layers:8, unstuck:15, games:10, homework:10 };
+  const mins = defaults[lastCategory] || 10;
+  document.getElementById("timerPreset").value = String(mins);
+  document.getElementById("timerCustom").style.display = "none";
+  resetTimer();
+}
+updateTimerDisplay();
 </script>
 
 </body>
