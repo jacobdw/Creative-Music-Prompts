@@ -173,12 +173,12 @@
   <h1>Creative Music Prompts</h1>
 
   <div class="row">
-    <button onclick="draw('start')">Ways to Start</button>
-    <button onclick="draw('develop')">Ways to Develop</button>
-    <button onclick="draw('layers')">Sound / Layer Suggestion</button>
-    <button onclick="draw('unstuck')">Ways to Get Unstuck</button>
-    <button onclick="draw('games')">Collaborative Game</button>
-    <button onclick="draw('homework')">Homework (next session)</button>
+    <button onclick="draw('start')">🌱 Ways to Start</button>
+    <button onclick="draw('develop')">🧱 Ways to Develop</button>
+    <button onclick="draw('layers')">🎛️ Sound / Layer Suggestion</button>
+    <button onclick="draw('unstuck')">🧯 Ways to Get Unstuck</button>
+    <button onclick="draw('games')">🎲 Collaborative Game</button>
+    <button onclick="draw('homework')">📚 Homework (next session)</button>
   </div>
 
   <div class="panel">
@@ -195,15 +195,15 @@
     </div>
 
     <div class="actions">
-      <button onclick="reroll()">Re-roll</button>
-      <button onclick="copyCard()">Copy</button>
-      <button onclick="stackSecondary()">Stack (Develop/Layers)</button>
-      <button onclick="clearStack()">Clear Stack</button>
+      <button onclick="reroll()">🔁 Re-roll</button>
+      <button onclick="copyCard()">📋 Copy</button>
+      <button onclick="stackSecondary()">➕ Stack (Develop/Layers)</button>
+      <button onclick="clearStack()">🧹 Clear Stack</button>
     </div>
 
     <div class="timerBox">
       <div class="timerRow">
-        <span class="tag">Timer</span>
+        <span class="tag">⏱️ Timer</span>
         <select id="timerPreset" onchange="onPresetChange()">
           <option value="1">1 min</option>
           <option value="5">5 min</option>
@@ -219,9 +219,9 @@
       </div>
 
       <div class="timerRow">
-        <button onclick="startPauseTimer()" id="timerStartBtn">Start</button>
-        <button onclick="resetTimer()">Reset</button>
-        <button onclick="setTimerToCardDefault()">Set to Card Default</button>
+        <button onclick="startPauseTimer()" id="timerStartBtn">▶️ Start</button>
+        <button onclick="resetTimer()">↩️ Reset</button>
+        <button onclick="setTimerToCardDefault()">🎯 Set to Card Default</button>
       </div>
 
       <div class="note">
@@ -753,7 +753,7 @@ function flashTag(id, msg, ms){
 }
 
 /* =========================
-   TIMER
+   TIMER + BEEP
    ========================= */
 
 let timerTotalSec = 10 * 60;
@@ -790,12 +790,37 @@ function resetTimer(){
   timerTotalSec = mins * 60;
   timerRemainingSec = timerTotalSec;
   updateTimerDisplay();
-  document.getElementById("timerStartBtn").textContent = "Start";
+  document.getElementById("timerStartBtn").textContent = "▶️ Start";
 }
+
+function playBeep(){
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioCtx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+
+    o.type = "sine";
+    o.frequency.value = 880; // pitch
+    g.gain.value = 0.05;     // gentle volume
+
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    o.start();
+    setTimeout(() => {
+      o.stop();
+      ctx.close();
+    }, 220);
+  } catch (e) {
+    // If blocked, do nothing
+  }
+}
+
 function startPauseTimer(){
   if (!timerRunning) {
     timerRunning = true;
-    document.getElementById("timerStartBtn").textContent = "Pause";
+    document.getElementById("timerStartBtn").textContent = "⏸️ Pause";
     timerHandle = setInterval(() => {
       timerRemainingSec -= 1;
       updateTimerDisplay();
@@ -803,14 +828,15 @@ function startPauseTimer(){
         stopTimerInternal();
         timerRemainingSec = 0;
         updateTimerDisplay();
-        document.getElementById("timerStartBtn").textContent = "Start";
+        document.getElementById("timerStartBtn").textContent = "▶️ Start";
         flashTag("repeatLabel", "Timer done ✓", 1200);
+        playBeep();
         if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
       }
     }, 1000);
   } else {
     stopTimerInternal();
-    document.getElementById("timerStartBtn").textContent = "Start";
+    document.getElementById("timerStartBtn").textContent = "▶️ Start";
   }
 }
 function stopTimerInternal(){
